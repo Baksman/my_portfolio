@@ -1,22 +1,28 @@
 import 'dart:ui';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+// import 'package:google_fonts/google_fonts.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
+import 'package:webapp/provider/theme_provider.dart';
+import 'package:webapp/screen/portfolio_screen.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(ListenableProvider(create: (_) => ThemeProvider(), child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
+  // This widget is the root of your application
+  // ThemeProvider provider = ThemeProvider();
+  bool isDark = false;
   @override
   Widget build(BuildContext context) {
+    bool isDark = Provider.of<ThemeProvider>(context).isDark;
     return MaterialApp(
       title: 'Baksman',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData.dark(),
+      theme: isDark ? ThemeData.dark() : ThemeData.light(),
       home: Home(),
     );
   }
@@ -30,6 +36,8 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
+    ThemeProvider provider = Provider.of<ThemeProvider>(context);
+
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(10.0),
@@ -38,35 +46,16 @@ class _HomeState extends State<Home> {
             SizedBox(
               height: 20,
             ),
-            // Row(
-            //   children: [
-            //     Expanded(
-            //       child: Container(
-            //         // height: 50,
-            //         width: double.infinity,
-            //         color: Colors.red,
-            //         child: Row(
-            //           children: [
-            //             Spacer(),
-            //             Icon(
-            //               Icons.menu,
-            //               color: Colors.white,
-            //             ),
-            //             SizedBox(
-            //               width: 20,
-            //             )
-            //           ],
-            //         ),
-            //       ),
-            //     )
-            //   ],
-            // ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 GestureDetector(
                   onTap: () {
-                    launchUrl("https:www.google.com");
+                    // launchUrl("https:www.google.com");
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                      return PortfolioScreen();
+                    }));
                   },
                   child: Container(
                     padding: EdgeInsets.all(10),
@@ -92,6 +81,7 @@ class _HomeState extends State<Home> {
                     ),
                   ),
                 ),
+
                 GestureDetector(
                   child: Container(
                     padding: EdgeInsets.all(10),
@@ -103,17 +93,31 @@ class _HomeState extends State<Home> {
                     ),
                   ),
                 ),
-                GestureDetector(
-                  child: Container(
-                    padding: EdgeInsets.all(10),
-                    height: 60,
-                    child: Text(
-                      "HIRE",
-                      style: TextStyle(
-                          fontSize: 20, fontFamily: "AnnieUseYourTelescope"),
+                IconButton(
+                    icon: FaIcon(
+                      FontAwesomeIcons.moon,
+                      // color: Colors.white,
                     ),
-                  ),
-                )
+                    onPressed: () {
+                      provider.changeTheme();
+                      // setState(() {
+                      //   widget.provider.changeTheme();
+                      // });
+                      // setState(() {
+                      //   widget.isDark = !widget.isDark;
+                      // });
+                    })
+                // GestureDetector(
+                //   child: Container(
+                //     padding: EdgeInsets.all(10),
+                //     height: 60,
+                //     child: Text(
+                //       "HIRE",
+                //       style: TextStyle(
+                //           fontSize: 20, fontFamily: "AnnieUseYourTelescope"),
+                //     ),
+                //   ),
+                // )
               ],
             ),
             SizedBox(
@@ -142,18 +146,6 @@ class _HomeState extends State<Home> {
                   ],
                 ),
 
-                // Text(
-                //   "A passion driven mobile & backend developer",
-                //   style: TextStyle(fontSize: 25),
-                // ),
-                // TypewriterAnimatedTextKit(
-                //   speed: Duration(milliseconds: 100),
-                //   text: [
-                //     "A passion driven mobile & backend developer",
-                //     "Creator of Get Job mobile application"
-                //   ],
-                //   textStyle: textStyle(25),
-                // ),
                 SizedBox(height: 20),
                 Center(
                   child: Container(
@@ -184,8 +176,7 @@ class _HomeState extends State<Home> {
                   children: [
                     Text(
                       "I create beautiful",
-                      style: TextStyle(
-                          fontSize: 20, fontFamily: "AnnieUseYourTelescope"),
+                      style: textStyle2(),
                     ),
                     SizedBox(
                       width: 5,
@@ -193,16 +184,14 @@ class _HomeState extends State<Home> {
                     RotateAnimatedTextKit(
                         repeatForever: true,
                         duration: Duration(seconds: 2),
-                        textStyle: TextStyle(
-                            fontSize: 20, fontFamily: "AnnieUseYourTelescope"),
+                        textStyle: textStyle2(),
                         text: ["mobile", "web", "desktop"]),
                     SizedBox(
                       width: 5,
                     ),
                     Text(
                       "apps with Flutter",
-                      style: TextStyle(
-                          fontSize: 20, fontFamily: "AnnieUseYourTelescope"),
+                      style: textStyle2(),
                     )
                   ],
                 ),
@@ -225,8 +214,7 @@ class _HomeState extends State<Home> {
                           "Django",
                           // "Do not test bugs out, design them out",
                         ],
-                        textStyle: TextStyle(
-                            fontSize: 20, fontFamily: "AnnieUseYourTelescope"),
+                        textStyle: textStyle2(),
                         textAlign: TextAlign.start,
                         alignment: AlignmentDirectional
                             .topStart // or Alignment.topLeft
@@ -244,13 +232,18 @@ class _HomeState extends State<Home> {
                       onTap: () {
                         launchUrl("https:github.com/baksman");
                       },
-                      child: Container(
-                        height: 40,
-                        width: 40,
-                        child: Center(child: FaIcon(FontAwesomeIcons.github)),
-                        decoration: BoxDecoration(
-                            color: Colors.black,
-                            borderRadius: BorderRadius.circular(20)),
+                      child: Tooltip(
+                        message: "github",
+                        child: Container(
+                          height: 40,
+                          width: 40,
+                          child: Center(
+                              child: FaIcon(FontAwesomeIcons.github,
+                                  color: Colors.white)),
+                          decoration: BoxDecoration(
+                              color: Colors.black,
+                              borderRadius: BorderRadius.circular(20)),
+                        ),
                       ),
                     ),
                     SizedBox(
@@ -261,13 +254,18 @@ class _HomeState extends State<Home> {
                         launchUrl(
                             "https://play.google.com/store/apps/details?id=com.baksman.hiring");
                       },
-                      child: Container(
-                        height: 40,
-                        width: 40,
-                        child: Center(child: FaIcon(FontAwesomeIcons.appStore)),
-                        decoration: BoxDecoration(
-                            color: Colors.black,
-                            borderRadius: BorderRadius.circular(20)),
+                      child: Tooltip(
+                        message: "Play store",
+                        child: Container(
+                          height: 40,
+                          width: 40,
+                          child: Center(
+                              child: FaIcon(FontAwesomeIcons.appStore,
+                                  color: Colors.white)),
+                          decoration: BoxDecoration(
+                              color: Colors.black,
+                              borderRadius: BorderRadius.circular(20)),
+                        ),
                       ),
                     ),
                     SizedBox(
@@ -278,13 +276,20 @@ class _HomeState extends State<Home> {
                         launchUrl("https://twitter.com/ibrahimshehuib4");
                         // https://twitter.com/ibrahimshehuib4
                       },
-                      child: Container(
-                        height: 40,
-                        width: 40,
-                        child: Center(child: FaIcon(FontAwesomeIcons.twitter)),
-                        decoration: BoxDecoration(
-                            color: Colors.black,
-                            borderRadius: BorderRadius.circular(20)),
+                      child: Tooltip(
+                        message: "twitter",
+                        child: Container(
+                          height: 40,
+                          width: 40,
+                          child: Center(
+                              child: FaIcon(
+                            FontAwesomeIcons.twitter,
+                            color: Colors.white,
+                          )),
+                          decoration: BoxDecoration(
+                              color: Colors.black,
+                              borderRadius: BorderRadius.circular(20)),
+                        ),
                       ),
                     ),
                   ],
@@ -295,6 +300,13 @@ class _HomeState extends State<Home> {
         ),
       ),
     );
+  }
+
+  TextStyle textStyle2() {
+    return TextStyle(
+        fontSize: 20,
+        fontWeight: FontWeight.bold,
+        fontFamily: "AnnieUseYourTelescope");
   }
 
   TextStyle textStyle(double fontSize) {
