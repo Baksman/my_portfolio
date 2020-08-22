@@ -2,11 +2,12 @@ import 'dart:ui';
 import 'package:provider/provider.dart';
 // import 'package:google_fonts/google_fonts.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:url_launcher/url_launcher.dart';
+// import 'package:url_launcher/url_launcher.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:webapp/provider/theme_provider.dart';
 import 'package:webapp/screen/portfolio_screen.dart';
+import 'package:webapp/utilities/url.dart';
 
 void main() {
   runApp(ListenableProvider(create: (_) => ThemeProvider(), child: MyApp()));
@@ -69,7 +70,7 @@ class _HomeState extends State<Home> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    launchUrl("https://twitter.com/ibrahimshehuib4");
+                    urlLauncher("https://twitter.com/ibrahimshehuib4");
                   },
                   child: Container(
                     padding: EdgeInsets.all(10),
@@ -83,6 +84,10 @@ class _HomeState extends State<Home> {
                 ),
 
                 GestureDetector(
+                  onTap: () {
+                    urlLauncher(
+                        "https://drive.google.com/file/d/13lxVZepeZU2gbvWlIzPVsiyB5FINua1D/view");
+                  },
                   child: Container(
                     padding: EdgeInsets.all(10),
                     height: 60,
@@ -95,7 +100,9 @@ class _HomeState extends State<Home> {
                 ),
                 IconButton(
                     icon: FaIcon(
-                      FontAwesomeIcons.moon,
+                      provider.isDark
+                          ? FontAwesomeIcons.lightbulb
+                          : FontAwesomeIcons.moon,
                       // color: Colors.white,
                     ),
                     onPressed: () {
@@ -107,17 +114,7 @@ class _HomeState extends State<Home> {
                       //   widget.isDark = !widget.isDark;
                       // });
                     })
-                // GestureDetector(
-                //   child: Container(
-                //     padding: EdgeInsets.all(10),
-                //     height: 60,
-                //     child: Text(
-                //       "HIRE",
-                //       style: TextStyle(
-                //           fontSize: 20, fontFamily: "AnnieUseYourTelescope"),
-                //     ),
-                //   ),
-                // )
+              
               ],
             ),
             SizedBox(
@@ -179,7 +176,7 @@ class _HomeState extends State<Home> {
                       style: textStyle2(),
                     ),
                     SizedBox(
-                      width: 5,
+                      width: 3,
                     ),
                     RotateAnimatedTextKit(
                         repeatForever: true,
@@ -230,7 +227,7 @@ class _HomeState extends State<Home> {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        launchUrl("https:github.com/baksman");
+                        urlLauncher("https:github.com/baksman");
                       },
                       child: Tooltip(
                         message: "github",
@@ -251,7 +248,7 @@ class _HomeState extends State<Home> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        launchUrl(
+                        urlLauncher(
                             "https://play.google.com/store/apps/details?id=com.baksman.hiring");
                       },
                       child: Tooltip(
@@ -273,7 +270,7 @@ class _HomeState extends State<Home> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        launchUrl("https://twitter.com/ibrahimshehuib4");
+                        urlLauncher("https://twitter.com/ibrahimshehuib4");
                         // https://twitter.com/ibrahimshehuib4
                       },
                       child: Tooltip(
@@ -321,15 +318,5 @@ class _HomeState extends State<Home> {
   //   );
   // }
 
-  Future<void> launchUrl(String url) async {
-    if (await canLaunch(url)) {
-      print("i can");
-      await launch(
-        url,
-        forceWebView: false,
-      );
-    } else {
-      print("cant launc url");
-    }
-  }
+ 
 }
