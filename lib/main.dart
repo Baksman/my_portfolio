@@ -6,6 +6,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:webapp/provider/theme_provider.dart';
+import 'package:webapp/screen/coming_soon.dart';
 import 'package:webapp/screen/portfolio_screen.dart';
 import 'package:webapp/utilities/url.dart';
 
@@ -14,9 +15,8 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application
   // ThemeProvider provider = ThemeProvider();
-  bool isDark = false;
+ final bool isDark = false;
   @override
   Widget build(BuildContext context) {
     bool isDark = Provider.of<ThemeProvider>(context).isDark;
@@ -55,7 +55,7 @@ class _HomeState extends State<Home> {
                     // launchUrl("https:www.google.com");
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) {
-                      return PortfolioScreen();
+                      return ComingSoonScreen();
                     }));
                   },
                   child: Container(
@@ -82,7 +82,6 @@ class _HomeState extends State<Home> {
                     ),
                   ),
                 ),
-
                 GestureDetector(
                   onTap: () {
                     urlLauncher(
@@ -114,7 +113,6 @@ class _HomeState extends State<Home> {
                       //   widget.isDark = !widget.isDark;
                       // });
                     })
-              
               ],
             ),
             SizedBox(
@@ -149,9 +147,17 @@ class _HomeState extends State<Home> {
                     height: 200,
                     width: 200,
                     decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(50),
-                        // boxShadow: [],
+                        borderRadius: BorderRadius.circular(100),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey
+                          ),
+                            BoxShadow(
+                            color: Colors.black
+                          )
+                        ],
                         color: Colors.teal,
+                        border: Border.all(color: Colors.white, width: 5),
                         image: DecorationImage(
                             fit: BoxFit.cover,
                             image: AssetImage("assets/my_pic.jpg"))),
@@ -318,5 +324,4 @@ class _HomeState extends State<Home> {
   //   );
   // }
 
- 
 }
